@@ -14,7 +14,8 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', app.views.index, name='index'),
-    url(r'^upload/?$', app.views.upload, name='upload'),
+    url(r'^create/?$', app.views.create, name='create'),
+    url(r'^delete/(?P<test_id>[0-9]+)/?$', app.views.delete, name='delete'),
     url(r'^admin/', include(admin.site.urls)),
 
 )
