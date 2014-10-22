@@ -1,0 +1,125 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+
+    <head>
+
+        <title>Mock2Prod</title>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    </head>
+
+    <body>
+
+        <h1>Mock2Prod</h1>
+
+        <script src="{% static 'jquery.min.js' %}"></script>
+        <script src="{% static 'resemble.js' %}"></script>
+
+        <input type="button" value="Diff all" class="test-all">
+
+        <table>
+            <tr>
+                <td></td>
+                <td>Mock</td>
+                <td>Prod</td>
+                <td>Diff</td>
+            </tr>
+            <tr class="test">
+                <td>
+                    <h2>#1</h2>
+                </td>
+                <td>
+                    <input type="file">
+                    <img class="mock" src="{% static 'ebay-today-mock.png' %}">
+                </td>
+                <td>
+                    <input type="text" value="http://www.ebay.com/today">
+                    <img class="prod" src="{% static 'ebay-today-prod.png' %}">
+                </td>
+                <td>
+                    <input type="button" value="Diff">
+                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
+                    <div class="diff">
+                </td>
+            </tr>
+            <tr class="test">
+                <td>
+                    <h2>#2</h2>
+                </td>
+                <td>
+                    <input type="file">
+                    <img class="mock" src="{% static 'ebay-today-mock.png' %}">
+                </td>
+                <td>
+                    <input type="text" value="http://www.ebay.com/today">
+                    <img class="prod" src="{% static 'ebay-today-mock.png' %}">
+                </td>
+                <td>
+                    <input type="button" value="Diff">
+                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
+                    <div class="diff">
+                </td>
+            </tr>
+        </table>
+
+        <script>
+
+            $(function() {
+
+                $( "body" ).on( "click", ".test input[type=button]", function() {
+                    var $test = $( this ).parents( ".test" );
+                    reset( $test )
+                    diff( $test );
+                }).on( "click", ".test-all", function() {
+                    resetAll();
+                    diffAll();
+                });
+
+                function complete( data, $element ) {
+                    $element.find( ".mismatch-percentage" ).text( data.misMatchPercentage );
+
+                    var diffImage = new Image();
+                    diffImage.src = data.getImageDataUrl();
+            		$element.find( ".diff" ).html( diffImage );
+                }
+
+                function diffAll() {
+                    $( ".test" ).each( function() {
+                        diff( $( this ) );
+                    });
+                }
+
+                function diff( $element ) {
+                    var mockSource = $element.find( ".mock" ).attr( "src" ),
+                        prodSource = $element.find( ".prod" ).attr( "src" ),
+                        onComplete = function( data ) { complete( data, $element ); };
+
+                    resemble( mockSource ).compareTo( prodSource ).onComplete( onComplete );
+                }
+
+                function reset( $test ) {
+                    $test.find( ".mismatch-percentage" ).html( "&hellip;" );
+                    $test.find( ".diff" ).empty();
+                }
+
+                function resetAll() {
+                    $( ".mismatch-percentage" ).html( "&hellip;" );
+                    $( ".diff" ).empty();
+                }
+
+                diffAll();
+
+            });
+
+        </script>
+
+    </body>
+
+</html>
