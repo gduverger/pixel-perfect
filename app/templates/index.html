@@ -31,6 +31,7 @@
                 <td>Mock</td>
                 <td>Prod</td>
                 <td>Diff</td>
+                <td></td>
             </tr>
             {% for test in tests %}
                 <tr class="test">
@@ -49,9 +50,12 @@
                         Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
                         <div class="diff">
                     </td>
+                    <td>
+                        <a href="{% url 'delete' test.id %}">Delete</a>
+                    </td>
                 </tr>
             {% endfor %}
-            <form method="post" action="{% url 'upload' %}" enctype="multipart/form-data">
+            <form method="post" action="{% url 'create' %}" enctype="multipart/form-data">
                 <tr class="test">
                     <td>{% csrf_token %}</td>
                     <td>
@@ -63,6 +67,7 @@
                     <td>
                         <input type="submit">
                     </td>
+                    <td></td>
                 </tr>
             </form>
         </table>
