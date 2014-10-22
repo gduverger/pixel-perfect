@@ -22,6 +22,7 @@
         <script src="{% static 'jquery.min.js' %}"></script>
         <script src="{% static 'resemble.js' %}"></script>
 
+
         <input type="button" value="Diff all" class="test-all">
 
         <table>
@@ -31,42 +32,39 @@
                 <td>Prod</td>
                 <td>Diff</td>
             </tr>
-            <tr class="test">
-                <td>
-                    <h2>#1</h2>
-                </td>
-                <td>
-                    <input type="file">
-                    <img class="mock" src="{% static 'ebay-today-mock.png' %}">
-                </td>
-                <td>
-                    <input type="text" value="http://www.ebay.com/today">
-                    <img class="prod" src="{% static 'ebay-today-prod.png' %}">
-                </td>
-                <td>
-                    <input type="button" value="Diff">
-                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
-                    <div class="diff">
-                </td>
-            </tr>
-            <tr class="test">
-                <td>
-                    <h2>#2</h2>
-                </td>
-                <td>
-                    <input type="file">
-                    <img class="mock" src="{% static 'ebay-today-mock.png' %}">
-                </td>
-                <td>
-                    <input type="text" value="http://www.ebay.com/today">
-                    <img class="prod" src="{% static 'ebay-today-mock.png' %}">
-                </td>
-                <td>
-                    <input type="button" value="Diff">
-                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
-                    <div class="diff">
-                </td>
-            </tr>
+            {% for test in tests %}
+                <tr class="test">
+                    <td>
+                        <h2>#{{ test.id }}</h2>
+                    </td>
+                    <td>
+                        <img class="mock" src="{{ test.file.url }}">
+                    </td>
+                    <td>
+                        {{ test.link }}
+                        <img class="prod" src="{% static 'ebay-today-prod.png' %}">
+                    </td>
+                    <td>
+                        <input type="button" value="Diff">
+                        Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
+                        <div class="diff">
+                    </td>
+                </tr>
+            {% endfor %}
+            <form method="post" action="{% url 'upload' %}" enctype="multipart/form-data">
+                <tr class="test">
+                    <td>{% csrf_token %}</td>
+                    <td>
+                        {{ test_form.file }}
+                    </td>
+                    <td>
+                        {{ test_form.link }}
+                    </td>
+                    <td>
+                        <input type="submit">
+                    </td>
+                </tr>
+            </form>
         </table>
 
         <script>
