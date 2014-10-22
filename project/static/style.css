@@ -1,0 +1,10 @@
+td {
+    vertical-align: top;
+}
+
+img.mock,
+img.prod,
+.diff img {
+    width: 300px;
+    display: block;
+}
