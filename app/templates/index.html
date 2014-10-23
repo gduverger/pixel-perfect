@@ -19,109 +19,11 @@
 
         <h1>Mock2Prod</h1>
 
-        <script src="{% static 'jquery.min.js' %}"></script>
-        <script src="{% static 'resemble.js' %}"></script>
+        {% for test in tests %}
+            <p><a href="{% url 'test' test.id %}">{{ test.id }}</a></p>
+        {% endfor %}
 
-
-        <input type="button" value="Diff all" class="test-all">
-
-        <table>
-            <tr>
-                <td></td>
-                <td>Mock</td>
-                <td>Prod</td>
-                <td>Diff</td>
-                <td></td>
-            </tr>
-            {% for test in tests %}
-                <tr class="test">
-                    <td>
-                        <h2>#{{ test.id }}</h2>
-                    </td>
-                    <td>
-                        <img class="mock" src="{{ test.file.url }}">
-                    </td>
-                    <td>
-                        {{ test.link }}
-                        <div class="prod">
-                    </td>
-                    <td>
-                        <input type="button" value="Diff">
-                        Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
-                        <div class="diff">
-                    </td>
-                    <td>
-                        <a href="{% url 'delete' test.id %}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            <form method="post" action="{% url 'create' %}" enctype="multipart/form-data">
-                <tr class="test">
-                    <td>{% csrf_token %}</td>
-                    <td>
-                        {{ test_form.file }}
-                    </td>
-                    <td>
-                        {{ test_form.link }}
-                    </td>
-                    <td>
-                        <input type="submit">
-                    </td>
-                    <td></td>
-                </tr>
-            </form>
-        </table>
-
-        <script>
-
-            $(function() {
-
-                $( "body" ).on( "click", ".test input[type=button]", function() {
-                    var $test = $( this ).parents( ".test" );
-                    reset( $test )
-                    diff( $test );
-                }).on( "click", ".test-all", function() {
-                    resetAll();
-                    diffAll();
-                });
-
-                function complete( data, $element ) {
-                    $element.find( ".mismatch-percentage" ).text( data.misMatchPercentage );
-
-                    var diffImage = new Image();
-                    diffImage.src = data.getImageDataUrl();
-            		$element.find( ".diff" ).html( diffImage );
-                }
-
-                function diffAll() {
-                    $( ".test" ).each( function() {
-                        diff( $( this ) );
-                    });
-                }
-
-                function diff( $element ) {
-                    var mockSource = $element.find( ".mock" ).attr( "src" ),
-                        prodSource = $element.find( ".prod" ).attr( "src" ),
-                        onComplete = function( data ) { complete( data, $element ); };
-
-                    resemble( mockSource ).compareTo( prodSource ).onComplete( onComplete );
-                }
-
-                function reset( $test ) {
-                    $test.find( ".mismatch-percentage" ).html( "&hellip;" );
-                    $test.find( ".diff" ).empty();
-                }
-
-                function resetAll() {
-                    $( ".mismatch-percentage" ).html( "&hellip;" );
-                    $( ".diff" ).empty();
-                }
-
-                diffAll();
-
-            });
-
-        </script>
+        <a href="{% url 'create' %}">Create a new test</a>
 
     </body>
 
