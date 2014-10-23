@@ -1,0 +1,86 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+
+    <head>
+
+        <title>Mock2Prod</title>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    </head>
+
+    <body>
+
+        <h1><a href="{% url 'index' %}">Mock2Prod</a></h1>
+
+        <input type="button" value="Re-compare all" class="compare-all">
+
+        <table>
+
+            <tr class="test">
+
+                <td>
+                    <h2>#{{ test.id }}</h2>
+                </td>
+
+                <td>
+                    <span>Mock</span>
+                    <div class="img">
+                        <img class="mock" src="{{ test.file.url }}">
+                    </div>
+                    <div><a href="{{ test.link }}">{{ test.link }}</a></div>
+                    <div><a href="http://www.browserstack.com/screenshots/{{ test.browserstack_job_id }}.json">{{ test.browserstack_job_id }}</a></div>
+                </td>
+
+                <td>
+                    <table>
+
+                        {% for screenshot in test.screenshots.all %}
+                            <tr class="result">
+
+                                <td>
+                                    {% if screenshot.browserstack_screenshot_image_url %}
+                                        <span>Screenshot</span>
+                                        <div class="img">
+                                            <img class="screenshot" src="{{ screenshot.browserstack_screenshot_image_url }}">
+                                        </div>
+                                    {% else %}
+                                        <div class="img">
+                                            Screenshot not ready, yet.
+                                        </div>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <input class="compare" type="button" value="Re-compare">
+                                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
+                                    <div class="diff img">
+                                        No comparison, yet.
+                                    </div>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>
+                    <a href="{% url 'delete' test.id %}">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <a href="{% url 'sync' test.id %}">Sync</a>
+
+        <script src="{% static 'jquery.min.js' %}"></script>
+        <script src="{% static 'resemble.js' %}"></script>
+        <script src="{% static 'script.js' %}"></script>
+
+    </body>
+
+</html>
