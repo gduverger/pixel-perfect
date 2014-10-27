@@ -47,9 +47,9 @@
                                 <td>
                                     {% if screenshot.browserstack_screenshot_image_url %}
                                         <span>Screenshot</span>
-                                        <div class="img">
+                                        <a href="{{ screenshot.browserstack_screenshot_image_url }}" class="img">
                                             <img class="screenshot" src="{{ screenshot.browserstack_screenshot_image_url }}">
-                                        </div>
+                                        </a>
                                     {% else %}
                                         <div class="img">
                                             Screenshot not ready, yet.
@@ -67,6 +67,12 @@
 
                             </tr>
                         {% endfor %}
+
+                        <tr class="result">
+                            <td><span>Screenshot</span><a href="{% static 'ebay-today-prod.png' %}" class="img"><img class="screenshot" src="{% static 'ebay-today-prod.png' %}"></a></td>
+                            <td><input class="compare" type="button" value="Re-compare">Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong><div class="diff img">No comparison, yet.</div></td>
+                        </tr>
+
                     </table>
                 </td>
                 <td>
