@@ -1,33 +1,20 @@
+{% extends "base.html" %}
 {% load static from staticfiles %}
 
-<!DOCTYPE html>
-
-    <head>
-
-        <title>Pixel Perfect</title>
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-
-        <link rel="stylesheet" href="{% static 'style.css' %}">
-
-    </head>
-
-    <body>
+{% block body %}
 
         <h1><a href="{% url 'index' %}">Pixel Perfect</a></h1>
 
-        <input type="button" value="Re-compare all" class="compare-all">
+        <h2>Test #{{ test.id }}</h2>
+
+        <p>
+            <input type="button" value="Re-compare all" class="compare-all">
+            <a href="{% url 'sync' test.id %}">Re-sync</a>
+        </p>
 
         <table>
 
             <tr class="test">
-
-                <td>
-                    <h2>#{{ test.id }}</h2>
-                </td>
 
                 <td>
                     <span>Mock</span>
@@ -81,12 +68,8 @@
             </tr>
         </table>
 
-        <a href="{% url 'sync' test.id %}">Sync</a>
-
         <script src="{% static 'jquery.min.js' %}"></script>
         <script src="{% static 'resemble.js' %}"></script>
         <script src="{% static 'script.js' %}"></script>
 
-    </body>
-
-</html>
+{% endblock %}

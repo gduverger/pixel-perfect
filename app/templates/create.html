@@ -1,6 +1,17 @@
-<form method="post" action="{% url 'create' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ test_form.file }}
-    {{ test_form.link }}
-    <input type="submit">
-</form>
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <h1><a href="{% url 'index' %}">Pixel Perfect</a></h1>
+
+    <h2>New test</h2>
+
+    <form method="post" action="{% url 'create' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Upload a mockup: {{ test_form.file }}</p>
+        <p>Enter a URL: {{ test_form.link }}</p>
+        <input type="submit" value="Create">
+    </form>
+
+{% endblock %}
