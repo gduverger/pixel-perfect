@@ -4,7 +4,7 @@ from django.db import models
 class Test(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True)
     browserstack_job_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    mock = models.FileField(upload_to='mocks')
+    mock = models.ImageField(upload_to='mocks')
     url = models.URLField(max_length=500)
 
     def __str__(self):
