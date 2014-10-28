@@ -1,7 +1,10 @@
 import base64
 import requests
 
-import project import settings
+from PIL import Image, ImageChops, ImageOps
+from io import BytesIO
+
+from project import settings
 
 from app import forms as app_forms
 from app import models as app_models
@@ -50,21 +53,26 @@ def get_screenshots(test):
     url = '%s/%s.json' % (settings.BROWSERSTACK_URL, test.browserstack_job_id)
     request = requests.get(url)
     json_response = get_json_response(request)
+
     if json_response and json_response.get('state') == 'done':
-        for screenshot in json_response.get('screenshots'):
-            if screenshot.get('state') == 'done':
-                s, _ = app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=screenshot.get('id'))
-                s.test = test
-                s.browserstack_screenshot_thumb_url = screenshot.get('thumb_url')
-                s.browserstack_screenshot_image_url = screenshot.get('image_url')
-                s.save()
+        for s in json_response.get('screenshots'):
+            if s.get('state') == 'done':
+
+                screenshot, _ = app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=s.get('id'))
+                screenshot.test = test
+                screenshot.browserstack_screenshot_image_url = s.get('image_url')
+                screenshot.save()
+
+                image = flat_image(get_image(screenshot.browserstack_screenshot_image_url))
+                save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, screenshot.browserstack_screenshot_id)
+                diff = diff_images(test.image, image)
+                save_image(diff, settings.MEDIA_ROOT_DIFFS, screenshot.browserstack_screenshot_id)
 
 
 def request_screenshots(test):
-
     data = {
-        "url": test.link,
-        "callback_url": BROWSERSTACK_CALLBACK_URL,
+        "url": test.url,
+        "callback_url": settings.BROWSERSTACK_CALLBACK_URL,
         "win_res": "1024x768",
         "mac_res": "1920x1080",
         "quality": "compressed",
@@ -81,3 +89,30 @@ def request_screenshots(test):
         test.save()
         for screenshot in json_response.get('screenshots'):
             app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=screenshot.get('id'), defaults={'test': test})
+
+
+def get_image(url):
+    response = requests.get(url)
+    return Image.open(BytesIO(response.content))
+
+
+def flat_image(image):
+    image.load()
+    _image = Image.new("RGB", image.size, (255, 255, 255))
+    try:
+        _image.paste(image, mask=image.split()[3]) # 3 is the alpha channel
+    except IndexError as e:
+        _image.paste(image)
+    return _image
+
+
+def save_image(image, path, name):
+    image.save(os.path.join(path, name))
+
+
+def diff_images(mock, screenshot):
+    difference = ImageChops.difference(mock, screenshot)
+    difference_invert = ImageChops.invert(difference)
+    difference_invert_convert = difference_invert.convert('L')
+    difference_invert_convert_colorize = ImageOps.colorize(difference_invert_convert, (255, 0, 255), (255, 255, 255))
+    return ImageChops.darker(difference_invert_convert_colorize, mock)

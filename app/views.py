@@ -47,16 +47,9 @@ def delete(request, test_id):
 
 
 def callback(request):
-    # TODO
-    print(request)
-
-
-"""
-def sync_all(request):
-    for test in app_models.Test.objects.all():
-        app_utils.get_screenshots(test)
-    return redirect('index')
-"""
+    # TODO get test_id
+    #app_utils.get_screenshots(get_object_or_404(app_models.Test, id=test_id))
+    pass
 
 
 def sync(request, test_id):
