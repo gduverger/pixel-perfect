@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import dj_database_url
 
+from project.confs import conf
+from project.confs import conf_dev
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -105,6 +108,9 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT_DIFFS = os.path.join(MEDIA_ROOT, 'diffs')
+#MEDIA_ROOT_MOCKS = os.path.join(MEDIA_ROOT, 'mocks')
+MEDIA_ROOT_SCREENSHOTS = os.path.join(MEDIA_ROOT, 'screenshots')
 MEDIA_URL = '/media/'
 
 if DEBUG:

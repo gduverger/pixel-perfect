@@ -9,8 +9,9 @@
 
     <form method="post" action="{% url 'create' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Upload a mockup: {{ test_form.file }}</p>
-        <p>Enter a URL: {{ test_form.link }}</p>
+        <p>Name: {{ test_form.name }}</p>
+        <p>Upload a mockup: {{ test_form.mock }}</p>
+        <p>Enter a URL: {{ test_form.url }}</p>
         <input type="submit" value="Create">
     </form>
 

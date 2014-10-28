@@ -5,12 +5,7 @@
 
         <h1><a href="{% url 'index' %}">Pixel Perfect</a></h1>
 
-        <h2>Test #{{ test.id }}</h2>
-
-        <p>
-            <input type="button" value="Re-compare all" class="compare-all">
-            <a href="{% url 'sync' test.id %}">Re-sync</a>
-        </p>
+        <h2>#{{ test.id }}: {{ test.name }}</h2>
 
         <table>
 
@@ -18,11 +13,13 @@
 
                 <td>
                     <span>Mock</span>
-                    <div class="img">
-                        <img class="mock" src="{{ test.file.url }}">
-                    </div>
-                    <div><a href="{{ test.link }}">{{ test.link }}</a></div>
-                    <div><a href="http://www.browserstack.com/screenshots/{{ test.browserstack_job_id }}.json">{{ test.browserstack_job_id }}</a></div>
+                    <a href="{{ test.mock.url }}" class="img">
+                        <img src="{{ test.mock.url }}">
+                    </a>
+                    <p>
+                        <a href="{{ test.url }}">{{ test.url }}</a>
+                        <a href="http://www.browserstack.com/screenshots/{{ test.browserstack_job_id }}.json">{{ test.browserstack_job_id }}</a>
+                    </p>
                 </td>
 
                 <td>
@@ -34,31 +31,27 @@
                                 <td>
                                     {% if screenshot.browserstack_screenshot_image_url %}
                                         <span>Screenshot</span>
-                                        <a href="{{ screenshot.browserstack_screenshot_image_url }}" class="img">
-                                            <img class="screenshot" src="{{ screenshot.browserstack_screenshot_image_url }}">
+                                        <a href="/media/screenshots/{{ screenshot.browserstack_screenshot_id }}.png" class="img">
+                                            <img src="/media/screenshots/{{ screenshot.browserstack_screenshot_id }}.png">
                                         </a>
                                     {% else %}
-                                        <div class="img">
-                                            Screenshot not ready, yet.
-                                        </div>
+                                        <div class="img">No screenshot, yet&hellip;</div>
                                     {% endif %}
                                 </td>
 
                                 <td>
-                                    <input class="compare" type="button" value="Re-compare">
-                                    Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong>
-                                    <div class="diff img">
-                                        No comparison, yet.
-                                    </div>
+                                    {% if screenshot.browserstack_screenshot_image_url %}
+                                        <span>Difference</span>
+                                        <a href="/media/diffs/{{ screenshot.browserstack_screenshot_id }}.png" class="img">
+                                            <img src="/media/diffs/{{ screenshot.browserstack_screenshot_id }}.png">
+                                        </a>
+                                    {% else %}
+                                        <div class="img">No difference, yet&hellip;</div>
+                                    {% endif %}
                                 </td>
 
                             </tr>
                         {% endfor %}
-
-                        <tr class="result">
-                            <td><span>Screenshot</span><a href="{% static 'ebay-today-prod.png' %}" class="img"><img class="screenshot" src="{% static 'ebay-today-prod.png' %}"></a></td>
-                            <td><input class="compare" type="button" value="Re-compare"> Mismatch percentage: <strong><span class="mismatch-percentage">&hellip;</span>%</strong><div class="diff img">No comparison, yet.</div></td>
-                        </tr>
 
                     </table>
                 </td>
@@ -67,9 +60,5 @@
                 </td>
             </tr>
         </table>
-
-        <script src="{% static 'jquery.min.js' %}"></script>
-        <script src="{% static 'resemble.js' %}"></script>
-        <script src="{% static 'script.js' %}"></script>
 
 {% endblock %}
