@@ -66,7 +66,7 @@ def get_screenshots(test):
 
                 image = flat_image(get_image(screenshot.browserstack_screenshot_image_url))
                 save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, screenshot.browserstack_screenshot_id)
-                diff = diff_images(test.mock, image)
+                diff = diff_images(Image.open(test.mock), image)
                 save_image(diff, settings.MEDIA_ROOT_DIFFS, screenshot.browserstack_screenshot_id)
 
 
