@@ -2,7 +2,5 @@ venv
 *.pyc
 staticfiles
 .env
-project/media/screenshots/
-project/media/diffs/
-project/media/mocks/
+project/media/
 project/confs/
