@@ -65,9 +65,9 @@ def get_screenshots(test):
                 screenshot.save()
 
                 image = flat_image(get_image(screenshot.browserstack_screenshot_image_url))
-                save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, screenshot.browserstack_screenshot_id)
+                save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, '%s.png' % screenshot.browserstack_screenshot_id)
                 diff = diff_images(test.image, image)
-                save_image(diff, settings.MEDIA_ROOT_DIFFS, screenshot.browserstack_screenshot_id)
+                save_image(diff, settings.MEDIA_ROOT_DIFFS, '%s.png' % screenshot.browserstack_screenshot_id)
 
 
 def request_screenshots(test):
