@@ -56,7 +56,7 @@ def email(request):
 def callback(request):
     # TODO get test_id
     #app_utils.get_screenshots(get_object_or_404(app_models.Test, id=test_id))
-    message = PMMail(api_key=settings.POSTMARK_API_KEY, subject="Screenshot(s) ready!", sender=settings.POSTMARK_SENDER, to=settings.POSTMARK_TO, text_body=request)
+    message = PMMail(api_key=settings.POSTMARK_API_KEY, subject="Screenshot(s) ready!", sender=settings.POSTMARK_SENDER, to=settings.POSTMARK_TO, text_body=request.__str__())
     message.send()
 
 
