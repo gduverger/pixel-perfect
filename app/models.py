@@ -13,8 +13,16 @@ class Test(models.Model):
 
 class Screenshot(models.Model):
     test = models.ForeignKey(Test, related_name='screenshots')
+
     browserstack_screenshot_id = models.CharField(max_length=50, unique=True)
     browserstack_screenshot_image_url = models.CharField(max_length=100)
+
+    browserstack_screenshot_os = models.CharField(max_length=50)
+    browserstack_screenshot_os_version = models.CharField(max_length=50)
+
+    browserstack_screenshot_browser = models.CharField(max_length=50)
+    browserstack_screenshot_browser_version = models.CharField(max_length=50)
+
     #image = models.FileField(upload_to='screenshots')
     #diff = models.FileField(upload_to='diffs')
 

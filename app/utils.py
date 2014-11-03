@@ -14,17 +14,17 @@ from app import models as app_models
 
 BROWSERS = [
     {
-        #"device": null,
         "os": "OS X",
-        "browser_version": "14.0",
         "os_version": "Lion",
-        "browser": "chrome"
+        "browser": "chrome",
+        "browser_version": "14.0",
+        #"name": "Chrome 14 on Mac OS X Lion"
     }, {
-        #"device": null,
         "os": "Windows",
-        "browser_version": "11.0",
         "os_version": "7",
-        "browser": "ie"
+        "browser_version": "11.0",
+        "browser": "ie",
+        #"name": "IE 11 on Windows 7"
     }
 ]
 
@@ -47,26 +47,6 @@ def get_json_response(request):
             return None
 
 
-def get_screenshots(test):
-    url = '%s/%s.json' % (settings.BROWSERSTACK_URL, test.browserstack_job_id)
-    request = requests.get(url)
-    json_response = get_json_response(request)
-
-    if json_response and json_response.get('state') == 'done':
-        for s in json_response.get('screenshots'):
-            if s.get('state') == 'done':
-
-                screenshot, _ = app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=s.get('id'))
-                screenshot.test = test
-                screenshot.browserstack_screenshot_image_url = s.get('image_url')
-                screenshot.save()
-
-                image = flat_image(get_image(screenshot.browserstack_screenshot_image_url))
-                save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, screenshot.browserstack_screenshot_id)
-                diff = diff_images(Image.open(test.mock.path), image)
-                save_image(diff, settings.MEDIA_ROOT_DIFFS, screenshot.browserstack_screenshot_id)
-
-
 def request_screenshots(test):
     data = {
         "url": test.url,
@@ -87,6 +67,30 @@ def request_screenshots(test):
         test.save()
         for screenshot in json_response.get('screenshots'):
             app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=screenshot.get('id'), defaults={'test': test})
+
+
+def get_screenshots(test):
+    url = '%s/%s.json' % (settings.BROWSERSTACK_URL, test.browserstack_job_id)
+    request = requests.get(url)
+    json_response = get_json_response(request)
+
+    if json_response and json_response.get('state') == 'done':
+        for s in json_response.get('screenshots'):
+            if s.get('state') == 'done':
+
+                screenshot, _ = app_models.Screenshot.objects.get_or_create(browserstack_screenshot_id=s.get('id'))
+                screenshot.test = test
+                screenshot.browserstack_screenshot_image_url = s.get('image_url')
+                screenshot.browserstack_screenshot_os = s.get('os')
+                screenshot.browserstack_screenshot_os_version = s.get('os_version')
+                screenshot.browserstack_screenshot_browser = s.get('browser')
+                screenshot.browserstack_screenshot_browser_version = s.get('browser_version')
+                screenshot.save()
+
+                image = flat_image(get_image(screenshot.browserstack_screenshot_image_url))
+                save_image(image, settings.MEDIA_ROOT_SCREENSHOTS, screenshot.browserstack_screenshot_id)
+                diff = diff_images(Image.open(test.mock.path), image)
+                save_image(diff, settings.MEDIA_ROOT_DIFFS, screenshot.browserstack_screenshot_id)
 
 
 def get_image(url):

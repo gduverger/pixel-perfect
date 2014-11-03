@@ -30,7 +30,7 @@
 
                                 <td>
                                     {% if screenshot.browserstack_screenshot_image_url %}
-                                        <span>Screenshot</span>
+                                        <span>Screenshot ({{ screenshot.browserstack_screenshot_browser }} {{ screenshot.browserstack_screenshot_browser_version }} on {{ screenshot.browserstack_screenshot_os }} {{ screenshot.browserstack_screenshot_os_version }})</span>
                                         <a href="/media/screenshots/{{ screenshot.browserstack_screenshot_id }}.png" class="img">
                                             <img src="/media/screenshots/{{ screenshot.browserstack_screenshot_id }}.png">
                                         </a>
