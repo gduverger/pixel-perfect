@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
     url(r'^create/?$', app.views.create, name='create'),
     url(r'^callback/?$', app.views.callback, name='callback'),
+    url(r'^email/?$', app.views.email, name='email'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
