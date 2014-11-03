@@ -17,14 +17,12 @@ BROWSERS = [
         "os": "OS X",
         "os_version": "Lion",
         "browser": "chrome",
-        "browser_version": "14.0",
-        #"name": "Chrome 14 on Mac OS X Lion"
+        "browser_version": "14.0"
     }, {
         "os": "Windows",
         "os_version": "7",
         "browser_version": "11.0",
-        "browser": "ie",
-        #"name": "IE 11 on Windows 7"
+        "browser": "ie"
     }
 ]
 
@@ -51,8 +49,8 @@ def request_screenshots(test):
     data = {
         "url": test.url,
         "callback_url": settings.BROWSERSTACK_CALLBACK_URL,
-        "win_res": "1024x768",
-        "mac_res": "1920x1080",
+        "win_res": "1295x1300",
+        "mac_res": "1295x1300",
         "quality": "compressed",
         "wait_time": 5,
         "orientation": "portrait",
