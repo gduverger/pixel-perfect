@@ -1,4 +1,5 @@
 import os
+import json
 import base64
 import requests
 
@@ -10,10 +11,6 @@ from project import settings
 from app import forms as app_forms
 from app import models as app_models
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
 
 BROWSERS = [
     {
