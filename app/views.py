@@ -1,7 +1,13 @@
+import os
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template import RequestContext
+
+from postmark import PMMail
+
+from project import settings
 
 from app import forms as app_forms
 from app import models as app_models
@@ -46,10 +52,19 @@ def delete(request, test_id):
     return redirect('index')
 
 
+def email(request):
+    callback(request)
+
 def callback(request):
     # TODO get test_id
     #app_utils.get_screenshots(get_object_or_404(app_models.Test, id=test_id))
-    pass
+    message = PMMail(api_key=settings.POSTMARK_API_KEY,
+                     subject="Hello from Postmark",
+                     sender="gduverger@pixel-perfect.herokuapp.com",
+                     to="georges.duverger@gmail.com",
+                     text_body="Hello")
+                     #tag="hello")
+    message.send()
 
 
 def sync(request, test_id):
