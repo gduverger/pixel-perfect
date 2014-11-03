@@ -1,5 +1,3 @@
-import os
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect, get_object_or_404
@@ -58,12 +56,7 @@ def email(request):
 def callback(request):
     # TODO get test_id
     #app_utils.get_screenshots(get_object_or_404(app_models.Test, id=test_id))
-    message = PMMail(api_key=settings.POSTMARK_API_KEY,
-                     subject="Hello from Postmark",
-                     sender="gduverger@pixel-perfect.herokuapp.com",
-                     to="georges.duverger@gmail.com",
-                     text_body="Hello")
-                     #tag="hello")
+    message = PMMail(api_key=settings.POSTMARK_API_KEY, subject="Screenshot(s) ready!", sender=settings.POSTMARK_SENDER, to=settings.POSTMARK_TO, text_body=request)
     message.send()
 
 
