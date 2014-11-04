@@ -1,0 +1,1 @@
+[{"fields": {"browserstack_job_id": "1fccfe50f9ed92f7fde0f86095e3ab341e937d8a", "mock": "mocks/ebay-today-mock-1265x1024.png", "name": "eBay Today (1200px)", "url": "http://www.ebay.com/today?_layout=1200"}, "pk": 1, "model": "app.test"}]
