@@ -49,8 +49,8 @@ def request_screenshots(test):
     data = {
         "url": test.url,
         "callback_url": settings.BROWSERSTACK_CALLBACK_URL,
-        "win_res": "1295x1300",
-        "mac_res": "1295x1300",
+        "win_res": "1280x1024",
+        "mac_res": "1280x1024",
         "quality": "compressed",
         "wait_time": 5,
         "orientation": "portrait",
