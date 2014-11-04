@@ -8,5 +8,5 @@ class Test(django_forms.ModelForm):
         fields = ['name', 'mock', 'url']
         widgets = {
             'name': django_forms.TextInput(attrs={'value': 'eBay Today (1200px)'}),
-            'url': django_forms.TextInput(attrs={'value': 'http://www.ebay.com/today'})
+            'url': django_forms.TextInput(attrs={'value': 'http://www.ebay.com/today?_layout=1200'})
         }
